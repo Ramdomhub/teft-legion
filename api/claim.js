@@ -3,7 +3,8 @@ export default async function handler(req, res) {
     return res.status(200).json({
       type: "action",
       icon: "https://placehold.co/200x200",
-      title: "You were not meant to find this.",
+      title: "This is not for everyone.",
+      description: "",
       label: "Continue",
       links: {
         actions: [
@@ -15,15 +16,18 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     const step = req.query.step || "1";
+    const account = req.body?.account || null;
 
     if (step === "1") {
       return res.status(200).json({
         type: "action",
-        title: "Most people never reach this point.",
-        label: "Continue",
+        icon: "https://placehold.co/200x200",
+        title: "Most people leave here.",
+        description: "",
+        label: "Stay",
         links: {
           actions: [
-            { label: "Continue", href: "/api/claim?step=2" }
+            { label: "Stay", href: "/api/claim?step=2" }
           ]
         }
       });
@@ -32,12 +36,13 @@ export default async function handler(req, res) {
     if (step === "2") {
       return res.status(200).json({
         type: "action",
-        title: "We don’t explain this.",
-        description: "You either understand it or you don’t.",
-        label: "I understand",
+        icon: "https://placehold.co/200x200",
+        title: "If you stay, you’re being watched.",
+        description: "",
+        label: "Prove it",
         links: {
           actions: [
-            { label: "I understand", href: "/api/claim?step=3" }
+            { label: "Prove it", href: "/api/claim?step=3" }
           ]
         }
       });
@@ -45,24 +50,14 @@ export default async function handler(req, res) {
 
     if (step === "3") {
       return res.status(200).json({
-        type: "action",
-        title: "You are early.",
-        description: "This is not for everyone.",
-        label: "Continue",
-        links: {
-          actions: [
-            { label: "Continue", href: "/api/claim?step=4" }
-          ]
-        }
-      });
-    }
-
-    if (step === "4") {
-      return res.status(200).json({
         type: "completed",
-        title: "You are part of it now.",
-        description: "There’s no announcement. There’s no explanation.",
-        message: "Come back tomorrow."
+        icon: "https://placehold.co/200x200",
+        title: "You passed.",
+        description: "We know you stayed.",
+        label: "Done",
+        message: account
+          ? `Signal received from ${account.slice(0, 4)}...${account.slice(-4)}`
+          : "Signal received."
       });
     }
   }
